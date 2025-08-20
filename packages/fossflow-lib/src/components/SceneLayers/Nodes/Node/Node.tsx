@@ -3,7 +3,8 @@ import { Box, Typography, Stack } from '@mui/material';
 import {
   PROJECTED_TILE_SIZE,
   DEFAULT_LABEL_HEIGHT,
-  MARKDOWN_EMPTY_VALUE
+  MARKDOWN_EMPTY_VALUE,
+  UNPROJECTED_TILE_SIZE
 } from 'src/config';
 import { getTilePosition } from 'src/utils';
 import { useIcon } from 'src/hooks/useIcon';
@@ -11,6 +12,8 @@ import { ViewItem } from 'src/types';
 import { useModelItem } from 'src/hooks/useModelItem';
 import { ExpandableLabel } from 'src/components/Label/ExpandableLabel';
 import { MarkdownEditor } from 'src/components/MarkdownEditor/MarkdownEditor';
+import { useUiStateStore } from 'src/stores/uiStateStore';
+import { Svg } from 'src/components/Svg/Svg';
 
 interface Props {
   node: ViewItem;
@@ -19,14 +22,22 @@ interface Props {
 
 export const Node = ({ node, order }: Props) => {
   const modelItem = useModelItem(node.id);
-  const { iconComponent } = useIcon(modelItem?.icon);
+  const { icon, iconComponent } = useIcon(modelItem?.icon);
+  const projection = useUiStateStore((state) => state.projection);
 
   const position = useMemo(() => {
+    if (projection === 'TOP') {
+      return {
+        x: node.tile.x * UNPROJECTED_TILE_SIZE,
+        y: node.tile.y * UNPROJECTED_TILE_SIZE
+      };
+    }
+
     return getTilePosition({
       tile: node.tile,
       origin: 'BOTTOM'
     });
-  }, [node.tile]);
+  }, [node.tile, projection]);
 
   const description = useMemo(() => {
     if (
@@ -61,7 +72,12 @@ export const Node = ({ node, order }: Props) => {
         {(modelItem?.name || description) && (
           <Box
             sx={{ position: 'absolute' }}
-            style={{ bottom: PROJECTED_TILE_SIZE.height / 2 }}
+            style={{
+              bottom:
+                projection === 'TOP'
+                  ? UNPROJECTED_TILE_SIZE / 2
+                  : PROJECTED_TILE_SIZE.height / 2
+            }}
           >
             <ExpandableLabel
               maxWidth={250}
@@ -80,16 +96,37 @@ export const Node = ({ node, order }: Props) => {
             </ExpandableLabel>
           </Box>
         )}
-        {iconComponent && (
-          <Box
-            sx={{
-              position: 'absolute',
-              pointerEvents: 'none'
-            }}
-          >
-            {iconComponent}
-          </Box>
-        )}
+        {projection === 'TOP'
+          ? icon && (
+              <Svg
+                viewboxSize={{
+                  width: UNPROJECTED_TILE_SIZE,
+                  height: UNPROJECTED_TILE_SIZE
+                }}
+                style={{
+                  position: 'absolute',
+                  left: -UNPROJECTED_TILE_SIZE / 2,
+                  top: -UNPROJECTED_TILE_SIZE / 2,
+                  pointerEvents: 'none'
+                }}
+              >
+                <image
+                  href={icon.url}
+                  width={UNPROJECTED_TILE_SIZE}
+                  height={UNPROJECTED_TILE_SIZE}
+                />
+              </Svg>
+            )
+          : iconComponent && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  pointerEvents: 'none'
+                }}
+              >
+                {iconComponent}
+              </Box>
+            )}
       </Box>
     </Box>
   );

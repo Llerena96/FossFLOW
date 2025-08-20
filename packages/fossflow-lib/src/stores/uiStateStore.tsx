@@ -19,6 +19,7 @@ const initialState = () => {
       view: '',
       mainMenuOptions: [],
       editorMode: 'EXPLORABLE_READONLY',
+      projection: 'ISOMETRIC',
       mode: getStartingMode('EXPLORABLE_READONLY'),
       iconCategoriesState: [],
       isMainMenuOpen: false,
@@ -43,6 +44,9 @@ const initialState = () => {
         },
         setEditorMode: (mode) => {
           set({ editorMode: mode, mode: getStartingMode(mode) });
+        },
+        setProjection: (projection) => {
+          set({ projection });
         },
         setIconCategoriesState: (iconCategoriesState) => {
           set({ iconCategoriesState });

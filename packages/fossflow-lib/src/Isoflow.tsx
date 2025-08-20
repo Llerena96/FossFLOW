@@ -21,7 +21,8 @@ const App = ({
   onModelUpdated,
   enableDebugTools = false,
   editorMode = 'EDITABLE',
-  renderer
+  renderer,
+  projection = 'ISOMETRIC'
 }: IsoflowProps) => {
   const uiStateActions = useUiStateStore((state) => {
     return state.actions;
@@ -40,7 +41,8 @@ const App = ({
   useEffect(() => {
     uiStateActions.setEditorMode(editorMode);
     uiStateActions.setMainMenuOptions(mainMenuOptions);
-  }, [editorMode, uiStateActions, mainMenuOptions]);
+    uiStateActions.setProjection(projection);
+  }, [editorMode, uiStateActions, mainMenuOptions, projection]);
 
   useEffect(() => {
     return () => {

@@ -1,4 +1,4 @@
-import { Coords, EditorModeEnum, MainMenuOptions } from './common';
+import { Coords, EditorModeEnum, MainMenuOptions, ViewProjection } from './common';
 import { Icon } from './model';
 import { ItemReference } from './scene';
 import { HotkeyProfile } from 'src/config/hotkeys';
@@ -140,6 +140,7 @@ export interface UiState {
   view: string;
   mainMenuOptions: MainMenuOptions;
   editorMode: keyof typeof EditorModeEnum;
+  projection: ViewProjection;
   iconCategoriesState: IconCollectionState[];
   mode: Mode;
   dialog: keyof typeof DialogTypeEnum | null;
@@ -159,6 +160,7 @@ export interface UiStateActions {
   setView: (view: string) => void;
   setMainMenuOptions: (options: MainMenuOptions) => void;
   setEditorMode: (mode: keyof typeof EditorModeEnum) => void;
+  setProjection: (projection: ViewProjection) => void;
   setIconCategoriesState: (iconCategoriesState: IconCollectionState[]) => void;
   resetUiState: () => void;
   setMode: (mode: Mode) => void;
