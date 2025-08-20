@@ -6,6 +6,7 @@ import {
   getTilePosition
 } from 'src/utils';
 import { UNPROJECTED_TILE_SIZE } from 'src/config';
+import { useUiStateStore } from 'src/stores/uiStateStore';
 
 interface Props {
   from: Coords;
@@ -25,6 +26,7 @@ export const useIsoProjection = ({
   gridSize: Size;
   pxSize: Size;
 } => {
+  const projection = useUiStateStore((state) => state.projection);
   const gridSize = useMemo(() => {
     return {
       width: Math.abs(from.x - to.x) + 1,
@@ -41,13 +43,20 @@ export const useIsoProjection = ({
   }, [from, to, originOverride]);
 
   const position = useMemo(() => {
+    if (projection === 'TOP') {
+      return {
+        x: origin.x * UNPROJECTED_TILE_SIZE,
+        y: origin.y * UNPROJECTED_TILE_SIZE
+      };
+    }
+
     const pos = getTilePosition({
       tile: origin,
       origin: orientation === 'Y' ? 'TOP' : 'LEFT'
     });
 
     return pos;
-  }, [origin, orientation]);
+  }, [origin, orientation, projection]);
 
   const pxSize = useMemo(() => {
     return {
@@ -56,16 +65,28 @@ export const useIsoProjection = ({
     };
   }, [gridSize]);
 
-  return {
-    css: {
-      position: 'absolute',
+  const css = useMemo<React.CSSProperties>(() => {
+    const base = {
+      position: 'absolute' as const,
       left: position.x,
       top: position.y,
       width: `${pxSize.width}px`,
-      height: `${pxSize.height}px`,
+      height: `${pxSize.height}px`
+    };
+
+    if (projection === 'TOP') {
+      return base;
+    }
+
+    return {
+      ...base,
       transform: getIsoProjectionCss(orientation),
       transformOrigin: 'top left'
-    },
+    };
+  }, [position, pxSize, orientation, projection]);
+
+  return {
+    css,
     position,
     gridSize,
     pxSize
