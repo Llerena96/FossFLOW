@@ -45,7 +45,7 @@ export const Grid = () => {
     if (isFirstRender) {
       setIsFirstRender(false);
     }
-  }, [scroll, zoom, isFirstRender, size]);
+  }, [scroll, zoom, projection, isFirstRender, size]);
 
   return (
     <Box

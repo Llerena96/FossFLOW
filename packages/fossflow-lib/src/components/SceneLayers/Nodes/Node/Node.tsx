@@ -13,6 +13,7 @@ import { useModelItem } from 'src/hooks/useModelItem';
 import { ExpandableLabel } from 'src/components/Label/ExpandableLabel';
 import { MarkdownEditor } from 'src/components/MarkdownEditor/MarkdownEditor';
 import { useUiStateStore } from 'src/stores/uiStateStore';
+import { Svg } from 'src/components/Svg/Svg';
 
 interface Props {
   node: ViewItem;
@@ -97,17 +98,24 @@ export const Node = ({ node, order }: Props) => {
         )}
         {projection === 'TOP'
           ? icon && (
-              <Box
-                component="img"
-                src={icon.url}
-                sx={{
+              <Svg
+                viewboxSize={{
+                  width: UNPROJECTED_TILE_SIZE,
+                  height: UNPROJECTED_TILE_SIZE
+                }}
+                style={{
                   position: 'absolute',
-                  width: UNPROJECTED_TILE_SIZE * 0.8,
-                  left: -UNPROJECTED_TILE_SIZE * 0.4,
-                  top: -UNPROJECTED_TILE_SIZE * 0.4,
+                  left: -UNPROJECTED_TILE_SIZE / 2,
+                  top: -UNPROJECTED_TILE_SIZE / 2,
                   pointerEvents: 'none'
                 }}
-              />
+              >
+                <image
+                  href={icon.url}
+                  width={UNPROJECTED_TILE_SIZE}
+                  height={UNPROJECTED_TILE_SIZE}
+                />
+              </Svg>
             )
           : iconComponent && (
               <Box
