@@ -20,6 +20,9 @@ export const Grid = () => {
   useEffect(() => {
     if (!elementRef.current) return;
 
+    // Update the grid graphic when switching projections
+    elementRef.current.style.backgroundImage = `url("${projection === 'TOP' ? gridTopTileSvg : gridTileSvg}")`;
+
     const baseTile =
       projection === 'TOP'
         ? { width: UNPROJECTED_TILE_SIZE, height: UNPROJECTED_TILE_SIZE }
@@ -65,7 +68,7 @@ export const Grid = () => {
           position: 'absolute',
           width: '100%',
           height: '100%',
-          background: `repeat url("${projection === 'TOP' ? gridTopTileSvg : gridTileSvg}")`
+          backgroundRepeat: 'repeat'
         }}
       />
     </Box>
