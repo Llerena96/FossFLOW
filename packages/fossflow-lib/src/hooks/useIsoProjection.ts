@@ -39,8 +39,11 @@ export const useIsoProjection = ({
 
     const boundingBox = getBoundingBox([from, to]);
 
-    return boundingBox[3];
-  }, [from, to, originOverride]);
+    // In top view we use the top-left corner so items retain their
+    // grid position when switching projections. Isometric view still
+    // relies on the bottom-left corner.
+    return projection === 'TOP' ? boundingBox[0] : boundingBox[3];
+  }, [from, to, originOverride, projection]);
 
   const position = useMemo(() => {
     if (projection === 'TOP') {
