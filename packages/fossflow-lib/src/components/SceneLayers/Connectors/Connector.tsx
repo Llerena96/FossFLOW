@@ -12,6 +12,7 @@ import { useIsoProjection } from 'src/hooks/useIsoProjection';
 import { useConnector } from 'src/hooks/useConnector';
 import { useScene } from 'src/hooks/useScene';
 import { useColor } from 'src/hooks/useColor';
+import { useUiStateStore } from 'src/stores/uiStateStore';
 
 interface Props {
   connector: ReturnType<typeof useScene>['connectors'][0];
@@ -23,6 +24,7 @@ export const Connector = ({ connector: _connector, isSelected }: Props) => {
   const color = useColor(_connector.color);
   const { currentView } = useScene();
   const connector = useConnector(_connector.id);
+  const projection = useUiStateStore((state) => state.projection);
 
   if (!connector || !color) {
     return null;
@@ -96,12 +98,16 @@ export const Connector = ({ connector: _connector, isSelected }: Props) => {
   return (
     <Box style={css}>
       <Svg
-        style={{
-          // TODO: The original x coordinates of each tile seems to be calculated wrongly.
-          // They are mirrored along the x-axis.  The hack below fixes this, but we should
-          // try to fix this issue at the root of the problem (might have further implications).
-          transform: 'scale(-1, 1)'
-        }}
+        style={
+          projection === 'ISOMETRIC'
+            ? {
+                // TODO: The original x coordinates of each tile seems to be calculated wrongly.
+                // They are mirrored along the x-axis. The hack below fixes this, but we should
+                // try to fix this issue at the root of the problem (might have further implications).
+                transform: 'scale(-1, 1)'
+              }
+            : undefined
+        }
         viewboxSize={pxSize}
       >
         <polyline
