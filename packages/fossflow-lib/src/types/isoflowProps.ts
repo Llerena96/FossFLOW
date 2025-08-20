@@ -1,4 +1,4 @@
-import type { EditorModeEnum, MainMenuOptions } from './common';
+import type { EditorModeEnum, MainMenuOptions, ViewProjection } from './common';
 import type { Model } from './model';
 import type { RendererProps } from './rendererProps';
 
@@ -15,5 +15,6 @@ export interface IsoflowProps {
   height?: number | string;
   enableDebugTools?: boolean;
   editorMode?: keyof typeof EditorModeEnum;
+  projection?: ViewProjection;
   renderer?: RendererProps;
 }

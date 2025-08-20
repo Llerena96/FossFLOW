@@ -89,7 +89,7 @@ export const Connector = ({ connector: _connector, isSelected }: Props) => {
         return `0, ${connectorWidthPx * 1.8}`;
       case 'SOLID':
       default:
-        return 'none';
+        return `${connectorWidthPx * 4}, ${connectorWidthPx * 2}`;
     }
   }, [connector.style, connectorWidthPx]);
 
@@ -122,7 +122,14 @@ export const Connector = ({ connector: _connector, isSelected }: Props) => {
           strokeLinejoin="round"
           strokeDasharray={strokeDashArray}
           fill="none"
-        />
+        >
+          <animate
+            attributeName="stroke-dashoffset"
+            values={`${connectorWidthPx * 6};0`}
+            dur="2s"
+            repeatCount="indefinite"
+          />
+        </polyline>
 
         {anchorPositions.map((anchor) => {
           return (
