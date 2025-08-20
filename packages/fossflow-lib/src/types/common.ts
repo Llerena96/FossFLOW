@@ -18,6 +18,13 @@ export const ProjectionOrientationEnum = {
   Y: 'Y'
 } as const;
 
+export const ViewProjectionEnum = {
+  ISOMETRIC: 'ISOMETRIC',
+  TOP: 'TOP'
+} as const;
+
+export type ViewProjection = keyof typeof ViewProjectionEnum;
+
 export type BoundingBox = [Coords, Coords, Coords, Coords];
 
 export type SlimMouseEvent = Pick<

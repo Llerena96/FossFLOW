@@ -25,6 +25,7 @@ export const SceneLayer = ({
   const zoom = useUiStateStore((state) => {
     return state.zoom;
   });
+  const projection = useUiStateStore((state) => state.projection);
 
   useEffect(() => {
     if (!elementRef.current) return;
@@ -47,8 +48,8 @@ export const SceneLayer = ({
       sx={{
         position: 'absolute',
         zIndex: order,
-        top: '50%',
-        left: '50%',
+        top: projection === 'TOP' ? 0 : '50%',
+        left: projection === 'TOP' ? 0 : '50%',
         width: 0,
         height: 0,
         userSelect: 'none',
