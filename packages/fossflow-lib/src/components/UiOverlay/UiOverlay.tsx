@@ -9,6 +9,7 @@ import { ItemControlsManager } from 'src/components/ItemControls/ItemControlsMan
 import { ToolMenu } from 'src/components/ToolMenu/ToolMenu';
 import { useUiStateStore } from 'src/stores/uiStateStore';
 import { MainMenu } from 'src/components/MainMenu/MainMenu';
+import { ProjectionToggle } from 'src/components/ProjectionToggle/ProjectionToggle';
 import { ZoomControls } from 'src/components/ZoomControls/ZoomControls';
 import { DebugUtils } from 'src/components/DebugUtils/DebugUtils';
 import { useResizeObserver } from 'src/hooks/useResizeObserver';
@@ -25,7 +26,8 @@ const ToolsEnum = {
   ZOOM_CONTROLS: 'ZOOM_CONTROLS',
   TOOL_MENU: 'TOOL_MENU',
   ITEM_CONTROLS: 'ITEM_CONTROLS',
-  VIEW_TITLE: 'VIEW_TITLE'
+  VIEW_TITLE: 'VIEW_TITLE',
+  VIEW_TOGGLE: 'VIEW_TOGGLE'
 } as const;
 
 interface EditorModeMapping {
@@ -38,9 +40,10 @@ const EDITOR_MODE_MAPPING: EditorModeMapping = {
     'ZOOM_CONTROLS',
     'TOOL_MENU',
     'MAIN_MENU',
-    'VIEW_TITLE'
+    'VIEW_TITLE',
+    'VIEW_TOGGLE'
   ],
-  [EditorModeEnum.EXPLORABLE_READONLY]: ['ZOOM_CONTROLS', 'VIEW_TITLE'],
+  [EditorModeEnum.EXPLORABLE_READONLY]: ['ZOOM_CONTROLS', 'VIEW_TITLE', 'VIEW_TOGGLE'],
   [EditorModeEnum.NON_INTERACTIVE]: []
 };
 
@@ -156,7 +159,7 @@ export const UiOverlay = () => {
           </Box>
         )}
 
-        {availableTools.includes('MAIN_MENU') && (
+        {(availableTools.includes('MAIN_MENU') || availableTools.includes('VIEW_TOGGLE')) && (
           <Box
             sx={{
               position: 'absolute'
@@ -166,7 +169,10 @@ export const UiOverlay = () => {
               left: appPadding.x
             }}
           >
-            <MainMenu />
+            <Stack direction="row" spacing={1}>
+              {availableTools.includes('MAIN_MENU') && <MainMenu />}
+              {availableTools.includes('VIEW_TOGGLE') && <ProjectionToggle />}
+            </Stack>
           </Box>
         )}
 
